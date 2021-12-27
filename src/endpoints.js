@@ -9,7 +9,9 @@ module.exports = (app) => {
 
   return [
     {
-      endpoints: [],
+      endpoints: [
+        ["post", "/query", "UserCanCreateQueries"],
+    ],
     },
   ];
 };
