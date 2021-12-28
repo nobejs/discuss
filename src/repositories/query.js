@@ -4,67 +4,44 @@ const tagsRepo = requireRepo("tag");
 
 const create = async (payload) => {
   try {
-    console.log(payload,"payload")
-    payload = baseRepo.addCreatedTimestamps(payload)
-    let tags = payload.tags
-    delete payload.tags
+    payload = baseRepo.addCreatedTimestamps(payload);
+    let tags = payload.tags;
+    delete payload.tags;
     let result = await knex.transaction(async (trx) => {
-      const rows = await trx('queries').insert(payload).returning("*");
+      const rows = await trx("queries").insert(payload).returning("*");
+      if (tags.length > 0) {
+        for (var i = 0; i < tags.length; i++) {
+          let tag = await tagsRepo.first("tags", {
+            uuid: tags[i].uuid,
+            name: tags[i].name,
+          });
+
+          if (tag) {
+            await trx("queries_tags").insert({
+              query_uuid: rows[0].uuid,
+              tag_uuid: tags[i].uuid,
+            });
+          } else {
+            const newTag = await baseRepo.create(
+              "tags",
+              { name: tags[i].name },
+              false
+            );
+            await trx("queries_tags").insert({
+              query_uuid: rows[0].uuid,
+              tag_uuid: newTag.uuid,
+            });
+          }
+        }
+      }
       return rows[0];
     });
-    console.log("result",result)
-    console.log(tags,"tags")
-    if (tags.length > 0) {
-      console.log(tags,"iftags")
-      tags.forEach(async(element )=> {
-        let tag = await tagsRepo.first("tags", {
-          uuid: element.uuid,
-          name: element.name
-        });
-
-        console.log(tag,"tagfound")
-        // if (tag) {
-        //   await knex.transaction(async (trx) => {
-        //     const rows = await trx('queries_tags').insert({
-        //       query_uuid:result.uuid,
-        //       tag_uuid:element.uuid
-        //     }).returning("*");
-            
-        //     return rows[0];
-        //   });
-        // }
-        // else {
-        //   console.log("elseeles")
-        //   const newTag = await baseRepo.create('tags', { name: element.name }, false);
-        //   console.log("else", newTag)
-        //   await knex.transaction(async (trx) => {
-        //     const rows = await trx('queries_tags').insert({
-        //       query_uuid:result.uuid,
-        //       tag_uuid:newTag.uuid
-        //     }).returning("*");
-        //     return rows[0];
-        //   });
-        // }
-        const newTag = await baseRepo.create('tags', { name: element.name }, false);
-        console.log("else", newTag)
-        await knex.transaction(async (trx) => {
-          const rows = await trx('queries_tags').insert({
-            query_uuid:result.uuid,
-            tag_uuid:newTag.uuid
-          }).returning("*");
-          return rows[0];
-        });
-      });
-    }
-   
     return result;
   } catch (error) {
     throw error;
   }
 };
 
-
-
 module.exports = {
-  create
+  create,
 };
