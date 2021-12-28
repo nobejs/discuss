@@ -11,6 +11,7 @@ module.exports = (app) => {
     {
       endpoints: [
         ["post", "/query", "UserCanCreateQueries"],
+        ["post", "/tags", "UserCanCreateTags"],
     ],
     },
   ];

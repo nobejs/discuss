@@ -6,10 +6,10 @@ const generateToken = require('../../../core/utils/randomUser')
  
 
 const prepare = ({ reqQuery, reqBody, reqParams, req }) => {
-  const payload = findKeysFromRequest(req, ["title", "anonymous"]);
-  //console.log(req.body,"useruser")
+  const payload = findKeysFromRequest(req, ["title", "anonymous","tags"]);
   payload["owner_uuid"] =req.body.owner_uuid
  // console.log(payload["owner_uuid"],'useruser')
+ payload['tags']= req.body.tags
   return payload;
 };
 
@@ -41,6 +41,7 @@ const validateInput = async (prepareResult) => {
 
   return validator(prepareResult, constraints);
 };
+
 const handle = async ({ prepareResult, authorizeResult }) => {
   try {
     await validateInput(prepareResult);
