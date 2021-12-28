@@ -21,9 +21,9 @@ global.requireValidator = () => require(`./core/validator`);
 global.requireHttpServer = () => require(`./core/httpServer`);
 
 global.requireStory = (name) => require(`./src/stories/${name}/story.js`);
-global.requireRepo = (name) => require(`./database/repositories/${name}`);
+global.requireRepo = (name) => require(`./src/repositories/${name}`);
 global.requireHelper = (name) => require(`./src/helpers/${name}`);
-global.requireSerializer = (name) => require(`./database/serializers/${name}`);
+global.requireSerializer = (name) => require(`./src/serializers/${name}`);
 global.requireGlobal = () => require(`./global.js`);
 global.requireKnex = () => require(`./database/knex.js`);
 

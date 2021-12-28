@@ -2,11 +2,14 @@ const validator = requireValidator();
 const QueryRepo = requireRepo("query");
 const QuerySerializer = requireSerializer("query");
 const findKeysFromRequest = requireUtil("findKeysFromRequest");
+const generateToken = require('../../../core/utils/randomUser')
+ 
 
 const prepare = ({ reqQuery, reqBody, reqParams, req }) => {
   const payload = findKeysFromRequest(req, ["title", "anonymous"]);
-  console.log(req.user,"useruser")
-  payload["owner_uuid"] = "01"
+  //console.log(req.body,"useruser")
+  payload["owner_uuid"] =req.body.owner_uuid
+ // console.log(payload["owner_uuid"],'useruser')
   return payload;
 };
 

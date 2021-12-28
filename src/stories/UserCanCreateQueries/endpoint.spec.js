@@ -18,7 +18,7 @@ describe("Test API UserCanCreateQueries", () => {
 
       const payload = {
         title: "query 1",
-        owner_uuid: "012",
+        owner_uuid:  contextClassRef.user.user_uuid,
         anonymous: true
       };
 
@@ -26,12 +26,14 @@ describe("Test API UserCanCreateQueries", () => {
         method: "POST",
         url: "/query", // This should be in endpoints.js
         payload,
-        
-
+        headers: contextClassRef.headers,
       });
     } catch (error) {
+      console.log(error,"ererer")
       respondResult = error;
     }
+
+
     expect(respondResult.statusCode).toBe(200);
     expect(respondResult.json()).toMatchObject({
       uuid: expect.any(String),
