@@ -23,6 +23,7 @@ const authorize = async ({ prepareResult }) => {
 
 const handle = async ({ prepareResult, authorizeResult }) => {
   try {
+    //console.log(prepareResult,"prepre")
     return await QueryRepo.getAllQueries();
   } catch (error) {
     throw error;
@@ -31,7 +32,8 @@ const handle = async ({ prepareResult, authorizeResult }) => {
 
 const respond = async ({ handleResult }) => {
   try {
-    return handleResult;
+    console.log(handleResult,"handle")
+    return await QuerySerializer.list(handleResult);
   } catch (error) {
     throw error;
   }

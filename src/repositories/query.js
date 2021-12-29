@@ -66,13 +66,17 @@ const getAllPostedQueries = async (user_uuid) => {
 }
 
 const getQueriesByTags = async (tags = []) => {
-  try{
-    console.log(tags,"tagag")
-    const rows = knex("queries_tags").whereIn('tag_uuid', tags).toSQL();
-    console.log(rows,"rowrow")
+  try {
+    console.log(tags, "tagag")
+    //const rows = knex("queries_tags").whereIn('tag_uuid', tags).toSQL();
+    const rows = knex('queries_tags')
+      .where((builder) =>
+        builder.whereIn('tag_uuid', tags)
+      )
+    console.log(rows, "rowrow")
 
-  }catch (error) {
-    console.log(error,"ererer")
+  } catch (error) {
+    console.log(error, "ererer")
     throw error;
   }
 }

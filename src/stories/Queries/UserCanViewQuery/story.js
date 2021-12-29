@@ -32,7 +32,7 @@ const handle = async ({ prepareResult, authorizeResult }) => {
 
 const respond = async ({ handleResult }) => {
   try {
-    return handleResult;
+    return await QuerySerializer.single(handleResult);
   } catch (error) {
     throw error;
   }

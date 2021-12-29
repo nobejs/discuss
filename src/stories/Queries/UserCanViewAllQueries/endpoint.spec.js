@@ -16,20 +16,21 @@ describe("Test API UserCanViewAllQueries", () => {
     try {
       const app = httpServer();
 
-      const payload = {};
 
-      // respondResult = await app.inject({
-      //   method: "POST",
-      //   url: "/api_endpoint", // This should be in endpoints.js
-      //   payload,
-      //   headers,
-      // });
+      respondResult = await app.inject({
+        method: "GET",
+        url: "/query", // This should be in endpoints.js
+        headers:contextClassRef.headers
+      });
     } catch (error) {
       respondResult = error;
     }
 
-    // expect(respondResult.statusCode).toBe(200);
-    // expect(respondResult.json()).toMatchObject({});
-    expect(1).toBe(1);
+     expect(respondResult.statusCode).toBe(200);
+     expect(respondResult).toEqual(
+      expect.arrayContaining([
+
+      ])
+    );
   });
 });

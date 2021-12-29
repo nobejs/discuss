@@ -6,12 +6,19 @@ describe("Test Handler UserCanViewAllQueries", () => {
     let result = {};
     try {
       result = await testStrategy("Queries/UserCanViewAllQueries", {
-        prepareResult: {},
+        prepareResult: {
+          title:"query",
+          anonymous:true
+        },
       });
     } catch (error) {
       debugLogger(error);
     }
     const { respondResult } = result;
-    expect(1).toBe(1);
+    expect(respondResult).toEqual(
+      expect.arrayContaining([
+
+      ])
+    );
   });
 });
