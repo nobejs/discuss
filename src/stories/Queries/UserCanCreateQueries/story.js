@@ -2,7 +2,7 @@ const validator = requireValidator();
 const QueryRepo = requireRepo("query");
 const QuerySerializer = requireSerializer("query");
 const findKeysFromRequest = requireUtil("findKeysFromRequest");
-const generateToken = require("../../../core/utils/randomUser");
+const generateToken = require("../../../../core/utils/randomUser");
 
 const prepare = ({ req }) => {
   const payload = findKeysFromRequest(req, ["title", "anonymous", "tags"]);

@@ -10,8 +10,8 @@ module.exports = (app) => {
   return [
     {
       endpoints: [
-        ["post", "/query", "UserCanCreateQueries"],
-        ["post", "/tags", "UserCanCreateTags"],
+        ["post", "/query", "Queries/UserCanCreateQueries"],
+        ["post", "/tags", "Tags/UserCanCreateTags"],
       ],
     },
   ];
