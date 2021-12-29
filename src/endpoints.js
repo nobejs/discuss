@@ -10,7 +10,13 @@ module.exports = (app) => {
   return [
     {
       endpoints: [
+        //queries
         ["post", "/query", "Queries/UserCanCreateQueries"],
+        ["get", "/query", "Queries/UserCanViewAllQueries"],
+        ["get", "/query/:query_uuid", "Queries/UserCanViewQuery"],
+        ["get", "/posted-query/:user_uuid", "Queries/UserCanViewHisPostedQueries"],
+        ["post", "/query-by-tags", "Queries/UserCanViewQueriesByTags"],
+        //tags
         ["post", "/tags", "Tags/UserCanCreateTags"],
       ],
     },

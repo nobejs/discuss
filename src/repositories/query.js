@@ -9,7 +9,7 @@ const create = async (payload) => {
     delete payload.tags;
     let result = await knex.transaction(async (trx) => {
       const rows = await trx("queries").insert(payload).returning("*");
-      if (tags.length > 0) {
+      if (tags && tags.length > 0) {
         for (var i = 0; i < tags.length; i++) {
           let tag = await tagsRepo.first("tags", {
             uuid: tags[i].uuid,
@@ -42,6 +42,45 @@ const create = async (payload) => {
   }
 };
 
+const getAllQueries = async () => {
+  try {
+    const rows = knex('queries').orderBy('created_at', 'desc');
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+
+};
+
+const findByUuid = async (where = {}) => {
+  return await baseRepo.first('queries', where);
+};
+
+const getAllPostedQueries = async (user_uuid) => {
+  try {
+    const rows = knex('queries').where('owner_uuid', user_uuid);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+const getQueriesByTags = async (tags = []) => {
+  try{
+    console.log(tags,"tagag")
+    const rows = knex("queries_tags").whereIn('tag_uuid', tags).toSQL();
+    console.log(rows,"rowrow")
+
+  }catch (error) {
+    console.log(error,"ererer")
+    throw error;
+  }
+}
+
 module.exports = {
   create,
+  getAllQueries,
+  findByUuid,
+  getAllPostedQueries,
+  getQueriesByTags
 };

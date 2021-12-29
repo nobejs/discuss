@@ -32,7 +32,7 @@ describe("Test API UserCanCreateQueries", () => {
     } catch (error) {
       respondResult = error;
     }
-    // expect(respondResult.statusCode).toBe(200);
+    expect(respondResult.statusCode).toBe(200);
     expect(respondResult.json()).toMatchObject({
       uuid: expect.any(String),
       title: "query 1",

@@ -6,7 +6,7 @@ const generateToken = require("../../../../core/utils/randomUser");
 
 const prepare = ({ req }) => {
   const payload = findKeysFromRequest(req, ["title", "anonymous", "tags"]);
-  payload["owner_uuid"] = req.user;
+  payload["owner_uuid"] = req.user
   return payload;
 };
 

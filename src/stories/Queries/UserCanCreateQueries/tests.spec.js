@@ -5,7 +5,7 @@ describe("Test Handler UserCanCreateQueries", () => {
   it("user can create query", async () => {
     let result = {};
     try {
-      result = await testStrategy("UserCanCreateQueries", {
+      result = await testStrategy("Queries/UserCanCreateQueries", {
         prepareResult: {
           title: "query 1",
           owner_uuid: "012",     
