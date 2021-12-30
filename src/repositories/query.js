@@ -67,24 +67,61 @@ const getAllPostedQueries = async (user_uuid) => {
 
 const getQueriesByTags = async (tags = []) => {
   try {
-    console.log(tags, "tagag")
-    //const rows = knex("queries_tags").whereIn('tag_uuid', tags).toSQL();
-    const rows = knex.select('query_uuid').from('queries_tags')
-      .where((builder) =>
-        builder.whereIn('tag_uuid', tags)
-      )
-    console.log(rows, "rowrow")
-    return rows;
+    const query = await getQuery(tags);
+    let queryArr = await query.promise();
+    queryArr = queryArr.map(function (obj) {
+      return obj['query_uuid'];
+    });
+
+    if (queryArr && queryArr.length > 0) {
+      const rows = knex('queries')
+        .where((builder) =>
+          builder.whereIn('uuid', queryArr)
+        );
+      return await rows;
+    } else {
+      return [{}];
+    }
+
   } catch (error) {
     console.log(error, "ererer")
     throw error;
   }
 }
 
+const getQuery = async (tags) => {
+  const rows = knex.select('query_uuid').from('queries_tags')
+    .where((builder) =>
+      builder.whereIn('tag_uuid', tags)
+    );
+  rows.promise = rows.then;
+  rows.then = undefined;
+  return rows;
+};
+
+const getTagbyQueryId = async (id) => {
+  const query = await getTag(id);
+  let queryArr = await query.promise();
+  queryArr = queryArr.map(function (obj) {
+    return obj['tag_uuid'];
+  });
+  return queryArr;
+
+}
+
+const getTag = async (id) => {
+  const rows = knex.select("tag_uuid").from('queries_tags').where('query_uuid',id);
+  rows.promise = rows.then;
+  rows.then = undefined;
+  return rows;
+};
+
+
 module.exports = {
   create,
   getAllQueries,
   findByUuid,
   getAllPostedQueries,
-  getQueriesByTags
+  getQueriesByTags,
+  getTagbyQueryId
 };

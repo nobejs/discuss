@@ -2,7 +2,7 @@ const contextClassRef = requireUtil("contextHelper");
 const randomUser = requireUtil("randomUser");
 const knex = requireKnex();
 const httpServer = requireHttpServer();
-
+const QueryRepo = requireRepo("query");
 describe("Test API UserCanViewAllQueries", () => {
   beforeAll(async () => {
     contextClassRef.user = randomUser();
@@ -15,7 +15,13 @@ describe("Test API UserCanViewAllQueries", () => {
     let respondResult;
     try {
       const app = httpServer();
-
+      const testQuery = await QueryRepo.create(
+        {
+          title: "query 1",
+          anonymous: true,
+          owner_uuid: contextClassRef.user.user_uuid,
+        },
+      );
 
       respondResult = await app.inject({
         method: "GET",
@@ -26,10 +32,13 @@ describe("Test API UserCanViewAllQueries", () => {
       respondResult = error;
     }
 
-     expect(respondResult.statusCode).toBe(200);
-     expect(respondResult).toEqual(
+     //expect(respondResult.statusCode).toBe(200);
+     expect(respondResult.json()).toEqual(
       expect.arrayContaining([
-
+        expect.objectContaining({
+          uuid: expect.any(String),
+          title: 'query 1'
+        }),
       ])
     );
   });

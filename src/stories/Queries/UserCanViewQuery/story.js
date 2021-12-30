@@ -1,7 +1,7 @@
 const QueryRepo = requireRepo("query");
 const QuerySerializer = requireSerializer("query");
 
-const prepare = ({ reqQuery, reqBody, reqParams, req }) => {
+const prepare = ({ reqParams }) => {
   return reqParams
 };
 

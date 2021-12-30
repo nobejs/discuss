@@ -10,7 +10,7 @@ describe("Test Handler UserCanViewQuery", () => {
     try {
       contextClassRef.user = randomUser();
       contextClassRef.headers = {
-        Authorization: `Bearer ${contextClassRef.user.token}`, // An authenticated user is making the api call
+        Authorization: `Bearer ${contextClassRef.user.token}`, 
       };
 
       const testQuery = await QueryRepo.create(

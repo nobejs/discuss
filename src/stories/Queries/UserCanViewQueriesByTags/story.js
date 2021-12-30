@@ -2,7 +2,6 @@ const QueryRepo = requireRepo("query");
 const QuerySerializer = requireSerializer("query");
 
 const prepare = ({ reqQuery, reqBody, reqParams, req }) => {
-  console.log(reqBody,'bodybody')
   return reqBody.tags;
 };
 
@@ -23,7 +22,7 @@ const authorize = async ({ prepareResult }) => {
 
 const handle = async ({ prepareResult, authorizeResult }) => {
   try {
-    console.log(prepareResult[0],'prepp')
+
     return await QueryRepo.getQueriesByTags(prepareResult)
   } catch (error) {
     throw error;

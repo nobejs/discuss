@@ -2,7 +2,7 @@ const contextClassRef = requireUtil("contextHelper");
 const randomUser = requireUtil("randomUser");
 const knex = requireKnex();
 const httpServer = requireHttpServer();
-
+const QueryRepo = requireRepo("query");
 describe("Test API UserCanViewHisPostedQueries", () => {
   beforeAll(async () => {
     contextClassRef.user = randomUser();
@@ -11,25 +11,35 @@ describe("Test API UserCanViewHisPostedQueries", () => {
     };
   });
 
-  it("dummy_story_which_will_pass", async () => {
+  it("user_can_view_his_queries", async () => {
     let respondResult;
     try {
       const app = httpServer();
+      const testQuery = await QueryRepo.create(
+        {
+          title: "query 1",
+          anonymous: true,
+          owner_uuid: contextClassRef.user.user_uuid,
+        },
+      );
 
-      const payload = {};
-
-      // respondResult = await app.inject({
-      //   method: "POST",
-      //   url: "/api_endpoint", // This should be in endpoints.js
-      //   payload,
-      //   headers,
-      // });
+      respondResult = await app.inject({
+        method: "GET",
+        url: `/posted-query/${contextClassRef.user.user_uuid}`, // This should be in endpoints.js
+        headers: contextClassRef.headers
+      });
     } catch (error) {
       respondResult = error;
     }
 
-    // expect(respondResult.statusCode).toBe(200);
-    // expect(respondResult.json()).toMatchObject({});
-    expect(1).toBe(1);
+    expect(respondResult.json()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          uuid: expect.any(String),
+          owner_uuid: contextClassRef.user.user_uuid
+        }),
+
+      ])
+    );
   });
 });
