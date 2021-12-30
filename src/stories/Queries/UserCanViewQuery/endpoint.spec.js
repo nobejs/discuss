@@ -34,7 +34,6 @@ describe("Test API UserCanViewQuery", () => {
       respondResult = error;
     }
     expect(respondResult.statusCode).toBe(200);
-    // expect(respondResult.json()).toMatchObject({});
     expect(respondResult.json()).toMatchObject({
       uuid: expect.any(String),
     });
