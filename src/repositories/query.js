@@ -1,3 +1,4 @@
+const { async } = require("validate.js");
 const knex = require("../../database/knex");
 const baseRepo = requireUtil("baseRepo");
 const tagsRepo = requireRepo("tag");
@@ -110,11 +111,58 @@ const getTagbyQueryId = async (id) => {
 }
 
 const getTag = async (id) => {
-  const rows = knex.select("tag_uuid").from('queries_tags').where('query_uuid',id);
+  const rows = knex.select("tag_uuid").from('queries_tags').where('query_uuid', id);
   rows.promise = rows.then;
   rows.then = undefined;
   return rows;
 };
+
+const remove = async (where) => {
+  await knex('queries_tags').where({ query_uuid: where.uuid }).delete();
+  const row = await baseRepo.remove('queries', where, 'hard');
+  return row;
+}
+
+const update = async (id, payload) => {
+  try {
+    await knex('queries_tags').where({ query_uuid: id }).delete();
+    payload["updated_at"] = new Date().toISOString();
+    let tags = payload.tags;
+    delete payload.tags;
+    let result = await knex.transaction(async (trx) => {
+      let rows = await knex('queries').where({ uuid: id }).update(payload).returning("*");
+      if (tags && tags.length > 0) {
+        for (var i = 0; i < tags.length; i++) {
+          let tag = await tagsRepo.first("tags", {
+            uuid: tags[i].uuid,
+            name: tags[i].name,
+          });
+          if (tag) {
+            await trx("queries_tags").insert({
+              query_uuid: id,
+              tag_uuid: tags[i].uuid,
+            });
+          } else {
+            const newTag = await baseRepo.create(
+              "tags",
+              { name: tags[i].name },
+              false
+            );
+            await trx("queries_tags").insert({
+              query_uuid: id,
+              tag_uuid: newTag.uuid,
+            });
+          }
+        }
+      }
+      return rows[0];
+    });
+    return result;
+  } catch (error) {
+    throw error;
+  }
+
+}
 
 
 module.exports = {
@@ -123,5 +171,7 @@ module.exports = {
   findByUuid,
   getAllPostedQueries,
   getQueriesByTags,
-  getTagbyQueryId
+  getTagbyQueryId,
+  remove,
+  update
 };

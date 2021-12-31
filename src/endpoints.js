@@ -16,6 +16,8 @@ module.exports = (app) => {
         ["get", "/query/:query_uuid", "Queries/UserCanViewQuery"],
         ["get", "/posted-query/:user_uuid", "Queries/UserCanViewHisPostedQueries"],
         ["post", "/query-by-tags", "Queries/UserCanViewQueriesByTags"],
+        ["delete", "/query/:query_uuid", "Queries/UserCanDeleteQuery"],
+        ["put", "/query/:query_uuid", "Queries/UserCanUpdateQuery"],
         //tags
         ["post", "/tags", "Tags/UserCanCreateTags"],
       ],
