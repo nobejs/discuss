@@ -1,5 +1,4 @@
-const { async } = require("validate.js");
-const knex = require("../../database/knex");
+const knex = requireKnex()
 const baseRepo = requireUtil("baseRepo");
 const tagsRepo = requireRepo("tag");
 
@@ -23,10 +22,8 @@ const create = async (payload) => {
               tag_uuid: tags[i].uuid,
             });
           } else {
-            const newTag = await baseRepo.create(
-              "tags",
+            const newTag = await tagsRepo.create(
               { name: tags[i].name },
-              false
             );
             await trx("queries_tags").insert({
               query_uuid: rows[0].uuid,
@@ -143,10 +140,8 @@ const update = async (id, payload) => {
               tag_uuid: tags[i].uuid,
             });
           } else {
-            const newTag = await baseRepo.create(
-              "tags",
+            const newTag = await tagsRepo.create(
               { name: tags[i].name },
-              false
             );
             await trx("queries_tags").insert({
               query_uuid: id,

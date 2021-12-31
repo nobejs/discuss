@@ -6,10 +6,9 @@ const addCreatedTimestamps = (payload) => {
   return payload;
 };
 
-const create = async (table, payload, timestamp=true) => {
+const create = async (table, payload) => {
   try {
-    if(timestamp)
-    {payload = addCreatedTimestamps(payload);}
+    payload = addCreatedTimestamps(payload);
     let result = await knex.transaction(async (trx) => {
       const rows = await trx(table).insert(payload).returning("*");
       return rows[0];

@@ -11,13 +11,13 @@ module.exports = (app) => {
     {
       endpoints: [
         //queries
-        ["post", "/query", "Queries/UserCanCreateQueries"],
-        ["get", "/query", "Queries/UserCanViewAllQueries"],
-        ["get", "/query/:query_uuid", "Queries/UserCanViewQuery"],
-        ["get", "/posted-query/:user_uuid", "Queries/UserCanViewHisPostedQueries"],
+        ["post", "/queries", "Queries/UserCanCreateQueries"],
+        ["get", "/queries", "Queries/UserCanViewAllQueries"],
+        ["get", "/queries/:query_uuid", "Queries/UserCanViewQuery"],
+        ["get", "/user-posted-query/", "Queries/UserCanViewHisPostedQueries"],
         ["post", "/query-by-tags", "Queries/UserCanViewQueriesByTags"],
-        ["delete", "/query/:query_uuid", "Queries/UserCanDeleteQuery"],
-        ["put", "/query/:query_uuid", "Queries/UserCanUpdateQuery"],
+        ["delete", "/queries/:query_uuid", "Queries/UserCanDeleteQuery"],
+        ["put", "/queries/:query_uuid", "Queries/UserCanUpdateQuery"],
         //tags
         ["post", "/tags", "Tags/UserCanCreateTags"],
       ],

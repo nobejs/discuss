@@ -1,10 +1,12 @@
-const knex = require("../../database/knex");
-const baseRepo = requireUtil("baseRepo");
+const knex = requireKnex()
 
 const create = async (payload) => {
   try {
-    //payload = baseRepo.addCreatedTimestamps(payload);
-    return await baseRepo.create("tags", payload, false);
+    let result = await knex.transaction(async (trx) => {
+      const rows = await trx('tags').insert(payload).returning("*");
+      return rows[0];
+    });
+    return result;
   } catch (error) {
     throw error;
   }

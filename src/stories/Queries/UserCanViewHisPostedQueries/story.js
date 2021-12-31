@@ -2,7 +2,7 @@ const QueryRepo = requireRepo("query");
 const QuerySerializer = requireSerializer("query");
 
 const prepare = ({ reqQuery, reqBody, reqParams, req }) => {
-  return reqParams;
+  return req.user;
 };
 
 const authorize = async ({ prepareResult }) => {
@@ -22,7 +22,7 @@ const authorize = async ({ prepareResult }) => {
 
 const handle = async ({ prepareResult, authorizeResult }) => {
   try {
-    return await QueryRepo.getAllPostedQueries(prepareResult.user_uuid);
+    return await QueryRepo.getAllPostedQueries(prepareResult);
   } catch (error) {
     throw error;
   }

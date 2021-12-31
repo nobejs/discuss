@@ -21,7 +21,7 @@ describe("Test Handler UserCanViewHisPostedQueries", () => {
         },
       );
       result = await testStrategy("Queries/UserCanViewHisPostedQueries", {
-        prepareResult: { user_uuid: contextClassRef.user.user_uuid }
+        prepareResult: contextClassRef.user.user_uuid 
 
       });
     } catch (error) {
