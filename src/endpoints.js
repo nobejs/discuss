@@ -12,9 +12,8 @@ module.exports = (app) => {
       endpoints: [
         //queries
         ["post", "/queries", "Queries/UserCanCreateQueries"],
-        ["get", "/queries", "Queries/UserCanViewAllQueries"],
+        ["get", "/queries", "Queries/UserCanViewAllQueries"], // can pass tags in request as /queries?tag=tag1,tag2
         ["get", "/queries/:query_uuid", "Queries/UserCanViewQuery"],
-        ["get", "/user-posted-query/", "Queries/UserCanViewHisPostedQueries"],
         ["post", "/query-by-tags", "Queries/UserCanViewQueriesByTags"],
         ["delete", "/queries/:query_uuid", "Queries/UserCanDeleteQuery"],
         ["put", "/queries/:query_uuid", "Queries/UserCanUpdateQuery"],

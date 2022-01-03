@@ -40,10 +40,16 @@ const create = async (payload) => {
   }
 };
 
-const getAllQueries = async () => {
+const getAllQueries = async (query) => {
   try {
-    const rows = knex('queries').orderBy('created_at', 'desc');
-    return rows;
+    if(query.tags){
+      var arr = query.tags.split(',');
+     return await getQueriesByTags(arr)
+    }
+    else{
+      const rows = knex('queries').orderBy('created_at', 'desc');
+      return rows;
+    }
   } catch (error) {
     throw error;
   }
@@ -63,7 +69,7 @@ const getAllPostedQueries = async (user_uuid) => {
   }
 }
 
-const getQueriesByTags = async (tags = []) => {
+const getQueriesByTags = async (tags=[]) => {
   try {
     const query = await getQuery(tags);
     let queryArr = await query.promise();
