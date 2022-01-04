@@ -42,11 +42,11 @@ const create = async (payload) => {
 
 const getAllQueries = async (query) => {
   try {
-    if(query.tags){
+    if (query.tags) {
       var arr = query.tags.split(',');
-     return await getQueriesByTags(arr)
+      return await getQueriesByTags(arr)
     }
-    else{
+    else {
       const rows = knex('queries').orderBy('created_at', 'desc');
       return rows;
     }
@@ -69,7 +69,7 @@ const getAllPostedQueries = async (user_uuid) => {
   }
 }
 
-const getQueriesByTags = async (tags=[]) => {
+const getQueriesByTags = async (tags = []) => {
   try {
     const query = await getQuery(tags);
     let queryArr = await query.promise();
@@ -165,6 +165,32 @@ const update = async (id, payload) => {
 
 }
 
+const getAllAnsweredQueries = async (id) =>{
+  try{
+    let query  = await getQueryfromResponse(id);
+    let queryArr = await query.promise();
+    queryArr = queryArr.map(function (obj) {
+      return obj['query_uuid'];
+    });
+    queryArr = [...new Set(queryArr)];
+    const rows = knex('queries')
+    .where((builder) =>
+      builder.whereIn('uuid', queryArr)
+    );
+    return rows;
+
+  }catch (err) {
+        throw err;
+    }
+}
+
+const getQueryfromResponse = async (id) => {
+  let rows  =  knex.select('query_uuid').from('responses').where({owner_uuid:id})
+  rows.promise = rows.then;
+  rows.then = undefined;
+  return rows;
+};
+
 
 module.exports = {
   create,
@@ -174,5 +200,6 @@ module.exports = {
   getQueriesByTags,
   getTagbyQueryId,
   remove,
-  update
+  update,
+  getAllAnsweredQueries
 };

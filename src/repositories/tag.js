@@ -1,4 +1,5 @@
 const knex = requireKnex()
+const baseRepo = requireUtil("baseRepo");
 
 const create = async (payload) => {
   try {
@@ -38,8 +39,43 @@ const first = async (table, where = {}) => {
   }
 };
 
+const getAllTags = async () => {
+  try {
+    const rows = knex('tags').orderBy('name', 'desc');
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+
+};
+
+const remove = async (where) => {
+  try {
+    await knex('queries_tags').where({ tag_uuid: where.uuid }).delete();
+    let rows = await knex('tags')
+      .where(where)
+      .delete();
+    return { message: "success" };
+  } catch (err) {
+    throw err;
+  }
+}
+
+const update = async (id,payload) =>{
+  try{
+    let rows = await knex('tags').where({uuid:id}).update(payload).returning("*");
+    return rows[0];
+  }catch (err) {
+      throw err;
+  }
+
+}
+
 module.exports = {
   create,
   countAll,
   first,
+  getAllTags,
+  remove,
+  update
 };
