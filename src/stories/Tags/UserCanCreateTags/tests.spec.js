@@ -5,7 +5,7 @@ describe("Test Handler UserCanCreateTags", () => {
   it("user can create tags", async () => {
     let result = {};
     try {
-      result = await testStrategy("UserCanCreateTags", {
+      result = await testStrategy("Tags/UserCanCreateTags", {
         prepareResult: {
           name:'tag1'
         },
