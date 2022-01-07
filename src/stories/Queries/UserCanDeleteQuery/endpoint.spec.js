@@ -28,7 +28,7 @@ describe("Test API UserCanDeleteQuery", () => {
 
       respondResult = await app.inject({
         method: "DELETE",
-        url: `/query/${testQuery.uuid}`, // This should be in endpoints.js
+        url: `/queries/${testQuery.uuid}`, // This should be in endpoints.js
         headers: contextClassRef.headers,
       });
     } catch (error) {

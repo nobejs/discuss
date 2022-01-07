@@ -2,7 +2,7 @@ const QueryRepo = requireRepo("query");
 const QuerySerializer = requireSerializer("query");
 
 const prepare = ({ reqQuery, reqBody, reqParams, req }) => {
-  return reqParams;
+  return {reqParams,user:req.user};
 };
 
 const authorize = async ({ prepareResult }) => {
@@ -22,9 +22,10 @@ const authorize = async ({ prepareResult }) => {
 
 const handle = async ({ prepareResult, authorizeResult }) => {
   try {
-    return await QueryRepo.remove({
-      uuid: prepareResult.query_uuid,
-    });
+    return await QueryRepo.remove(
+   prepareResult.reqParams.query_uuid,
+   prepareResult.user
+    );
   } catch (error) {
     throw error;
   }
@@ -32,7 +33,7 @@ const handle = async ({ prepareResult, authorizeResult }) => {
 
 const respond = async ({ handleResult }) => {
   try {
-    return await QuerySerializer.single(handleResult);
+    return handleResult;
   } catch (error) {
     throw error;
   }

@@ -120,10 +120,23 @@ const getTag = async (id) => {
   return rows;
 };
 
-const remove = async (where) => {
-  await knex('queries_tags').where({ query_uuid: where.uuid }).delete();
-  const row = await baseRepo.remove('queries', where, 'hard');
-  return row;
+const remove = async (id, user) => {
+
+  const query = await knex('queries').where({ uuid: id });
+  if (query.length === 0) {
+    return { message: "doesn't exist" };
+  } else {
+    if (query[0].owner_uuid !== user) {
+      return { message: "Not authorized" };
+    }
+    else {
+      const where = { uuid: id }
+      await knex('queries_tags').where({ query_uuid: where.uuid }).delete();
+      await baseRepo.remove('queries', where, 'hard');
+      return { message: "success" };
+    }
+  }
+
 }
 
 const update = async (id, payload) => {
@@ -165,27 +178,27 @@ const update = async (id, payload) => {
 
 }
 
-const getAllAnsweredQueries = async (id) =>{
-  try{
-    let query  = await getQueryfromResponse(id);
+const getAllAnsweredQueries = async (id) => {
+  try {
+    let query = await getQueryfromResponse(id);
     let queryArr = await query.promise();
     queryArr = queryArr.map(function (obj) {
       return obj['query_uuid'];
     });
     queryArr = [...new Set(queryArr)];
     const rows = knex('queries')
-    .where((builder) =>
-      builder.whereIn('uuid', queryArr)
-    );
+      .where((builder) =>
+        builder.whereIn('uuid', queryArr)
+      );
     return rows;
 
-  }catch (err) {
-        throw err;
-    }
+  } catch (err) {
+    throw err;
+  }
 }
 
 const getQueryfromResponse = async (id) => {
-  let rows  =  knex.select('query_uuid').from('responses').where({owner_uuid:id})
+  let rows = knex.select('query_uuid').from('responses').where({ owner_uuid: id })
   rows.promise = rows.then;
   rows.then = undefined;
   return rows;

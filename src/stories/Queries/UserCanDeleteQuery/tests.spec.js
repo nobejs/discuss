@@ -23,13 +23,16 @@ describe("Test Handler UserCanDeleteQuery", () => {
       );
       result = await testStrategy("Queries/UserCanDeleteQuery", {
         prepareResult: {
-          query_uuid: testQuery.uuid
+          reqParams: { query_uuid: testQuery.uuid },
+          user: contextClassRef.user.user_uuid
         },
       });
     } catch (error) {
       debugLogger(error);
     }
     const { respondResult } = result;
-    expect(respondResult).toMatchObject({});
+    expect(respondResult).toMatchObject({
+      message: "success"
+    });
   });
 });
