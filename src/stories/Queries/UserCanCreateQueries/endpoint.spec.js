@@ -25,7 +25,7 @@ describe("Test API UserCanCreateQueries", () => {
 
       respondResult = await app.inject({
         method: "POST",
-        url: "/query", // This should be in endpoints.js
+        url: "/queries", // This should be in endpoints.js
         payload,
         headers: contextClassRef.headers,
       });

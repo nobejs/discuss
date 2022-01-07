@@ -30,7 +30,7 @@ describe("Test API UserCanUpdateQuery", () => {
 
       respondResult = await app.inject({
         method: "PUT",
-        url: `/query/${testQuery.uuid}`, // This should be in endpoints.js
+        url: `/queries/${testQuery.uuid}`, // This should be in endpoints.js
         payload,
         headers: contextClassRef.headers
       });

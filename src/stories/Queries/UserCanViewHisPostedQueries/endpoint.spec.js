@@ -25,7 +25,7 @@ describe("Test API UserCanViewHisPostedQueries", () => {
 
       respondResult = await app.inject({
         method: "GET",
-        url: `/user-posted-query`, // This should be in endpoints.js
+        url: `/posted-queries`, // This should be in endpoints.js
         headers: contextClassRef.headers
       });
     } catch (error) {

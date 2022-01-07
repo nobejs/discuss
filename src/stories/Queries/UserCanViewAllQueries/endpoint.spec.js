@@ -25,7 +25,7 @@ describe("Test API UserCanViewAllQueries", () => {
 
       respondResult = await app.inject({
         method: "GET",
-        url: "/query", // This should be in endpoints.js
+        url: "/queries", // This should be in endpoints.js
         headers:contextClassRef.headers
       });
     } catch (error) {
