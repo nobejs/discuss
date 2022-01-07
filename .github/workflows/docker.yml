@@ -26,12 +26,12 @@ jobs:
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
         
       - name: Echo
-        run: echo nobedocker/access:${{ steps.get_version.outputs.VERSION }}
+        run: echo nobedocker/discuss:${{ steps.get_version.outputs.VERSION }}
 
       - name: docker build teams
         run: |
-          docker build . -t nobedocker/access:${{ steps.get_version.outputs.VERSION }}
+          docker build . -t nobedocker/discuss:${{ steps.get_version.outputs.VERSION }}
 
       - name: docker push
         run: |
-          docker push nobedocker/access:${{ steps.get_version.outputs.VERSION }}
+          docker push nobedocker/discuss:${{ steps.get_version.outputs.VERSION }}
