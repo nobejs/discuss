@@ -20,11 +20,16 @@ describe("Test Handler UserCanViewAllQueries", () => {
           owner_uuid: contextClassRef.user.user_uuid,
         },
       );
-      result = await testStrategy("Queries/UserCanViewAllQueries");
+      result = await testStrategy("Queries/UserCanViewAllQueries", {
+        prepareResult: {
+          reqQuery: {}
+        },
+      });
     } catch (error) {
       debugLogger(error);
     }
     const { respondResult } = result;
+    console.log(respondResult,"resres")
     expect(respondResult).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

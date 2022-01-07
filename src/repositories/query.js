@@ -42,7 +42,7 @@ const create = async (payload) => {
 
 const getAllQueries = async (query) => {
   try {
-    if (query.tags) {
+    if (query && query.tags && query.tags.length>0) {
       var arr = query.tags.split(',');
       return await getQueriesByTags(arr)
     }
