@@ -9,7 +9,27 @@ module.exports = (app) => {
 
   return [
     {
-      endpoints: [],
+      endpoints: [
+        //queries
+        ["post", "/queries", "Queries/UserCanCreateQueries"],
+        ["get", "/queries", "Queries/UserCanViewAllQueries"], // can pass tags in request as /queries?tag=tag1,tag2
+        ["get", "/queries/:query_uuid", "Queries/UserCanViewQuery"],
+        ["delete", "/queries/:query_uuid", "Queries/UserCanDeleteQuery"],
+        ["put", "/queries/:query_uuid", "Queries/UserCanUpdateQuery"],
+        ["get", "/answered-queries", "Queries/UserCanViewAnsweredQueries"],
+        ["get", "/posted-queries", "Queries/UserCanViewHisPostedQueries"],
+        //tags
+        ["post", "/tags", "Tags/UserCanCreateTags"],
+        ["get", "/tags", "Tags/UserCanViewTags"],
+        ["delete", "/tags/:tag_uuid", "Tags/UserCanDeleteTags"],
+        ["put", "/tags/:tag_uuid", "Tags/UserCanUpdateTags"],
+
+        //responses
+        ["post", "/responses", "Responses/UserCanAddResponse"],
+        ["get", "/responses/:query_uuid", "Responses/UserCanViewResponsesOfQuery"],
+        ["delete", "/responses/:response_uuid", "Responses/UserCanDeleteResponse"],
+        ["put", "/responses/:response_uuid", "Responses/UserCanUpdateResponse"],
+      ],
     },
   ];
 };

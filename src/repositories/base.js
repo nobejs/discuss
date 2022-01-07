@@ -1,4 +1,4 @@
-const knex = require("../knex");
+const knex = requireKnex();
 
 const addCreatedTimestamps = (payload) => {
   payload["created_at"] = new Date().toISOString();
