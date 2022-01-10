@@ -22,7 +22,11 @@ const create = async (table, payload) => {
 const update = async (table, where, payload) => {
   try {
     payload["updated_at"] = new Date().toISOString();
-    let rows = await knex(table).where(where).update(payload).returning("*");
+    let rows = await knex(table)
+      .where(where)
+      .whereNull("deleted_at")
+      .update(payload)
+      .returning("*");
     return rows[0];
   } catch (error) {
     throw error;
@@ -52,15 +56,18 @@ const remove = async (table, where, mode = "soft") => {
   }
 };
 
-const first = async (table, where = {}) => {
+const first = async (table, where = {}, throwNotFound = false) => {
   try {
     let row = await knex(table).where(where).whereNull("deleted_at").first();
 
-    if (row === undefined) {
-      throw {
-        statusCode: 404,
-        message: "Not Found",
-      };
+    if (throwNotFound) {
+      if (row === undefined) {
+        throw {
+          errorCode: "NotFound",
+          statusCode: 404,
+          message: "Not Found",
+        };
+      }
     }
 
     return row;
@@ -86,7 +93,7 @@ const countAll = async (table, where = {}, whereNot = {}) => {
   }
 };
 
-const findAll = async (table, where = {}, columns) => {
+const findAll = async (table, where = {}, columns = "*") => {
   try {
     let rows = await knex(table)
       .where(where)
