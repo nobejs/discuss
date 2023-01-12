@@ -1,4 +1,4 @@
-const neptuneCaller = require("../../../functions/neptune/neptuneCaller");
+const neptune = require("@teurons/neptune-nodejs");
 const validator = requireValidator();
 const findKeysFromRequest = requireUtil("findKeysFromRequest");
 const ResponseRepo = requireRepo("response");
@@ -65,23 +65,21 @@ const handle = async ({ prepareResult, authorizeResult }) => {
   try {
     await validateInput(prepareResult);
     let res = await ResponseRepo.create(prepareResult);
-    console.log("res>>>>>", res, JSON.stringify(res));
 
     const query = await QueryRepo.findByUuid({
       uuid: res.query_uuid,
     });
 
-    console.log("query -->", query);
-
     if (query && query.owner_uuid && query.owner_uuid !== res.owner_uuid) {
-      await neptuneCaller({
-        event_type: "ask_anything_query_user_response",
+      const eventType = "ask_anything_query_user_response";
+      const eventData = {
+        data: JSON.stringify(res),
+        notification_type: "ask_anything_query_user_response",
+      };
+      const neptuneData = {
         user_id: query.owner_uuid,
-        data: {
-          data: JSON.stringify(res),
-          notification_type: "ask_anything_query_user_response",
-        },
-      });
+      };
+      await neptune.fire(eventType, eventData, neptuneData);
     }
 
     return res;
