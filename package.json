@@ -28,6 +28,8 @@
   "dependencies": {
     "@sentry/node": "^6.17.9",
     "@sentry/tracing": "^6.17.9",
+    "axios": "^1.2.2",
+    "dayjs": "^1.11.7",
     "dotenv": "^10.0.0",
     "extract-zip": "^2.0.1",
     "fastify": "^3.21.6",
